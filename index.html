@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a0a0d">
+<title>Campus Kosmik Soul</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#08080b;--panel:#121218;--panel2:#191920;--text:#faf8fb;--muted:#aaa3ad;--line:#2a2630;--pink:#ff4fa3}
+:root[data-theme="light"]{--bg:#f8f5f8;--panel:#fff;--panel2:#f0ebf0;--text:#171319;--muted:#706873;--line:#e6dde5}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 0,rgba(255,79,163,.12),transparent 28rem),var(--bg);color:var(--text);min-height:100vh}button,input{font:inherit}[hidden]{display:none!important}
+.auth{min-height:100vh;display:grid;place-items:center;padding:22px}.card{width:min(100%,500px);background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.brand{display:flex;gap:12px;align-items:center}.mark,.avatar{display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),#8d35ff);color:#fff;font-weight:900}.mark{width:48px;height:48px;border-radius:15px}.avatar{width:42px;height:42px;border-radius:50%}.eyebrow{margin:0;color:var(--pink);font-size:11px;font-weight:900;letter-spacing:.15em}.brand h1,.brand h2{margin:2px 0 0}.hero{padding:38px 0 22px}.hero h2{font-size:42px;line-height:1.02;margin:12px 0}.hero p,.muted{color:var(--muted);line-height:1.6}.pill{display:inline-block;border:1px solid rgba(255,79,163,.3);background:rgba(255,79,163,.08);color:var(--pink);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
+form{display:grid;gap:14px}label{display:grid;gap:7px;font-size:13px;font-weight:700}input{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:14px 15px;border-radius:14px;outline:0}input:focus{border-color:var(--pink)}.primary{border:0;background:linear-gradient(135deg,var(--pink),#ce2f82);color:#fff;padding:15px;border-radius:14px;font-weight:900}.error{color:#ff9b9b;font-size:13px}.fine{font-size:12px;color:var(--muted);margin-top:16px}
+.app{min-height:100vh}.top{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);background:rgba(8,8,11,.86);backdrop-filter:blur(18px)}:root[data-theme="light"] .top{background:rgba(248,245,248,.88)}.top h2{margin:0}.actions{display:flex;gap:9px;align-items:center}.icon,.logout{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:10px 12px}.content{max-width:1100px;margin:auto;padding:22px}.welcome{display:flex;justify-content:space-between;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:26px}.welcome h1{font-size:38px;line-height:1;margin:12px 0}.route{margin-top:30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.module{min-height:170px;text-align:left;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:20px;padding:18px;display:flex;flex-direction:column}.module:not(.locked):hover{border-color:rgba(255,79,163,.5)}.module.locked{opacity:.55}.module .num{font-size:11px;letter-spacing:.14em;font-weight:900;color:var(--pink)}.module h3{font-size:19px;margin:14px 0 8px}.module p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 15px}.meta{margin-top:auto;display:flex;justify-content:space-between;align-items:center}.status{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:6px 8px}.open{color:var(--pink);border-color:rgba(255,79,163,.3)}
+.detail{margin-top:22px}.back{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:10px 12px}.moduleHero{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px}.moduleHero h1{font-size:36px;margin:10px 0}.lesson{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}.lesson summary{padding:17px 18px;font-weight:850;cursor:pointer}.lessonBody{border-top:1px solid var(--line);padding:18px;color:var(--muted);line-height:1.65}.lessonBody h4{color:var(--text);margin:16px 0 8px}.empty{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;color:var(--muted)}
+@media(max-width:760px){.grid{grid-template-columns:1fr 1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome h1{font-size:32px}}@media(max-width:520px){.grid{grid-template-columns:1fr}.card{padding:22px}.hero h2{font-size:36px}.content{padding:16px}.module{min-height:145px}}
+</style>
+</head>
+<body>
+<main id="auth" class="auth">
+<section class="card">
+<div class="brand"><div class="mark">K</div><div><p class="eyebrow">CAMPUS OFICIAL</p><h1>Kosmik Soul</h1></div></div>
+<div class="hero"><span class="pill">Tu espacio de aprendizaje</span><h2>Continúa tu evolución, a tu ritmo.</h2><p>Accede con el correo y contraseña registrados por Kosmik Soul.</p></div>
+<form id="loginForm">
+<label>Correo electrónico<input id="email" type="email" autocomplete="email" required></label>
+<label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label>
+<button id="loginBtn" class="primary" type="submit">Entrar al Campus</button>
+<p id="err" class="error" hidden></p>
+</form>
+<p class="fine">El acceso es personal. Si tienes problemas para entrar, contacta a Kosmik Soul.</p>
+</section>
+</main>
+
+<div id="app" class="app" hidden>
+<header class="top">
+<div><p class="eyebrow">CAMPUS KOSMIK SOUL</p><h2>Mi aprendizaje</h2></div>
+<div class="actions"><button id="theme" class="icon">◐</button><div id="avatar" class="avatar">KS</div><button id="logout" class="logout">Salir</button></div>
+</header>
+<section class="content">
+<div id="home">
+<div class="welcome"><div><span class="pill">Bienvenida</span><h1 id="welcome">Tu Campus Kosmik Soul</h1><p class="muted">Avanza únicamente por los módulos que tengas desbloqueados.</p></div><div><b id="summary">0 módulos</b></div></div>
+<div class="route"><p class="eyebrow">RUTA FORMATIVA</p><h2>Tu recorrido</h2><div id="modules" class="grid"></div></div>
+</div>
+<div id="detail" class="detail" hidden><button id="back" class="back">← Volver</button><div id="detailBody"></div></div>
+</section>
+</div>
+
+<script>
+const URL='https://vsuijjdxrpopwmvwdpyv.supabase.co';
+const KEY='sb_publishable_CEFUma5AmfzdUkCEAxUEAA_0A9vRQ9F';
+const db=supabase.createClient(URL,KEY);
+let user=null,mods=[],access=new Map();
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+function nameFrom(p,u){for(const k of ['full_name','name','display_name','nombre','first_name']) if(p&&p[k]) return p[k];return u?.user_metadata?.full_name||u?.email?.split('@')[0]||'Alumna Kosmik Soul'}
+function initials(n){return n.split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')||'KS'}
+function statusLabel(a){if(!a?.is_unlocked)return'Bloqueado';if(a.academic_status==='completed')return'Completado';if(a.academic_status==='validated')return'Validado';return'En progreso'}
+function pretty(k){return k.replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase()).replace('Course Interpretation','Interpretación del curso').replace('Memory Phrase','Para recordar').replace('Reflection Questions','Preguntas de reflexión').replace('Interpretation Steps','Pasos de interpretación')}
+function renderJSON(v,depth=0){
+ if(v==null)return'';
+ if(['string','number','boolean'].includes(typeof v))return'<p>'+esc(v)+'</p>';
+ if(Array.isArray(v)){if(v.every(x=>['string','number','boolean'].includes(typeof x)))return'<ul>'+v.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';return v.map(x=>renderJSON(x,depth+1)).join('')}
+ if(typeof v==='object')return Object.entries(v).map(([k,val])=>{const b=renderJSON(val,depth+1);return b?'<div>'+(depth<2?'<h4>'+esc(pretty(k))+'</h4>':'')+b+'</div>':''}).join('');
+ return'';
+}
+async function boot(){
+ $('auth').hidden=true;$('app').hidden=false;
+ const [pr,mr,ar]=await Promise.all([
+  db.from('profiles').select('*').eq('id',user.id).maybeSingle(),
+  db.from('modules').select('id,title,description,position,is_active').eq('is_active',true).order('position'),
+  db.from('module_access').select('module_id,is_unlocked,academic_status').eq('student_id',user.id)
+ ]);
+ const p=pr.data||null;mods=mr.data||[];access=new Map((ar.data||[]).map(x=>[x.module_id,x]));
+ const n=nameFrom(p,user);$('welcome').textContent='Hola, '+n;$('avatar').textContent=initials(n);
+ renderModules();
+ if(mr.error||ar.error){$('summary').textContent='Sesión iniciada';console.warn(mr.error||ar.error)}
+}
+function renderModules(){
+ $('modules').innerHTML='';const open=mods.filter(m=>access.get(m.id)?.is_unlocked);$('summary').textContent=open.length+' disponible'+(open.length===1?'':'s')+' · '+mods.length+' módulos';
+ if(!mods.length){$('modules').innerHTML='<div class="empty">No se pudieron cargar los módulos. Revisa las políticas RLS de Supabase.</div>';return}
+ mods.forEach(m=>{const a=access.get(m.id),ok=!!a?.is_unlocked,b=document.createElement('button');b.className='module '+(ok?'':'locked');b.innerHTML='<span class="num">MÓDULO '+m.position+'</span><h3>'+esc(m.title)+'</h3><p>'+esc(m.description||(ok?'Continúa con tu aprendizaje.':'Se desbloqueará cuando corresponda.'))+'</p><div class="meta"><span class="status '+(ok?'open':'')+'">'+statusLabel(a)+'</span><span>'+(ok?'Abrir →':'🔒')+'</span></div>';if(ok)b.onclick=()=>openModule(m);$('modules').appendChild(b)})
+}
+async function openModule(m){
+ $('home').hidden=true;$('detail').hidden=false;$('detailBody').innerHTML='<div class="moduleHero"><span class="pill">Módulo '+m.position+'</span><h1>'+esc(m.title)+'</h1><p class="muted">'+esc(m.description||'Contenido formativo Kosmik Soul.')+'</p></div><div class="empty">Cargando lecciones…</div>';
+ const r=await db.from('lessons').select('id,title,summary,position,content_json,is_active').eq('module_id',m.id).eq('is_active',true).order('position');
+ const hero='<div class="moduleHero"><span class="pill">Módulo '+m.position+'</span><h1>'+esc(m.title)+'</h1><p class="muted">'+esc(m.description||'Contenido formativo Kosmik Soul.')+'</p></div>';
+ if(r.error){$('detailBody').innerHTML=hero+'<div class="empty">No pudimos cargar las lecciones: '+esc(r.error.message)+'</div>';return}
+ if(!r.data?.length){$('detailBody').innerHTML=hero+'<div class="empty">Contenido en preparación.</div>';return}
+ $('detailBody').innerHTML=hero+r.data.map((l,i)=>'<details class="lesson" '+(i===0?'open':'')+'><summary>'+esc(l.title||('Lección '+l.position))+'</summary><div class="lessonBody">'+(l.summary?'<p>'+esc(l.summary)+'</p>':'')+renderJSON(l.content_json)+'</div></details>').join('');
+}
+$('loginForm').onsubmit=async e=>{e.preventDefault();$('err').hidden=true;$('loginBtn').disabled=true;$('loginBtn').textContent='Entrando…';const r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});$('loginBtn').disabled=false;$('loginBtn').textContent='Entrar al Campus';if(r.error){$('err').textContent=r.error.message==='Invalid login credentials'?'Correo o contraseña incorrectos.':'No pudimos iniciar sesión: '+r.error.message;$('err').hidden=false;return}user=r.data.user;boot()}
+$('logout').onclick=async()=>{await db.auth.signOut();location.reload()}
+$('back').onclick=()=>{$('detail').hidden=true;$('home').hidden=false}
+$('theme').onclick=()=>{const t=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=t;localStorage.setItem('kosmik-theme',t)}
+document.documentElement.dataset.theme=localStorage.getItem('kosmik-theme')||'dark';
+(async()=>{const r=await db.auth.getSession();if(r.data.session?.user){user=r.data.session.user;boot()}})();
+</script>
+</body>
+</html>
